@@ -1,0 +1,27 @@
+{
+	"name": "nextras/orm-phpstan",
+	"description": "PhpStan extension for Nextras Orm",
+	"license": [
+		"MIT"
+	],
+	"require": {
+		"php": "~7.0",
+		"phpstan/phpstan": "^0.8",
+		"nextras/orm": "~2.2"
+	},
+	"require-dev": {
+		"nette/tester": "~2.0",
+		"nextras/dbal": "~2.1",
+		"mockery/mockery": "~0.9"
+	},
+	"autoload": {
+		"psr-4": {
+			"Nextras\\OrmPhpStan\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"classmap": [
+			"tests/"
+		]
+	}
+}

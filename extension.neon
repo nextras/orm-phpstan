@@ -1,0 +1,5 @@
+services:
+	-
+		class: Nextras\OrmPhpStan\Rules\SetValueMethodRule
+		tags:
+			- phpstan.rules.rule

@@ -1,0 +1,10 @@
+parameters:
+	autoload_directories:
+		- %rootDir%/../../../tests/testbox
+
+services:
+	errorFormatter.rawSimple:
+		class: NextrasTests\OrmPhpStan\RawSimpleErrorFormatter
+
+includes:
+	- ../extension.neon
