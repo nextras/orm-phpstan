@@ -15,16 +15,20 @@ class Test
 
 	public function testOk()
 	{
-		$test = function (?SecondEntity $var) {};
-
 		$entity = new Entity();
 		$entity->second = new SecondEntity();
-		$test($entity->second);
+		$this->testType($entity->second);
 
 		$entity->second = null;
-		$test($entity->second);
+		$this->testType($entity->second);
 
 		$entity->second = 1;
-		$test($entity->second);
+		$this->testType($entity->second);
 	}
+
+
+	/**
+	 * @param SecondEntity|null $var
+	 */
+	private function testType($var) {}
 }

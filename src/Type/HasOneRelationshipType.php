@@ -42,7 +42,7 @@ class HasOneRelationshipType implements Type
 
 	public function combineWith(Type $otherType): Type
 	{
-		return $this->originalType->combineWith($otherType);
+		return $this->originalType;
 	}
 
 
