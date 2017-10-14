@@ -6,7 +6,7 @@
 	],
 	"require": {
 		"php": "~7.0",
-		"phpstan/phpstan": "^0.8",
+		"phpstan/phpstan": "dev-master",
 		"nextras/orm": "~2.2 || ~3.0"
 	},
 	"require-dev": {

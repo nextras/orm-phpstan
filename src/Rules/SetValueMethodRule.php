@@ -9,6 +9,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Rules\Rule;
+use PHPStan\Type\TypeWithClassName;
 
 
 class SetValueMethodRule implements Rule
@@ -44,7 +45,7 @@ class SetValueMethodRule implements Rule
 		}
 		$valueType = $scope->getType($args[1]->value);
 		$varType = $scope->getType($node->var);
-		if ($varType->getClass() === null) {
+		if (!$varType instanceof TypeWithClassName) {
 			return [];
 		}
 		$firstValue = $args[0]->value;
@@ -52,7 +53,7 @@ class SetValueMethodRule implements Rule
 			return [];
 		}
 		$fieldName = $firstValue->value;
-		$class = $this->broker->getClass($varType->getClass());
+		$class = $this->broker->getClass($varType->getClassName());
 		$interfaces = array_map(function (ClassReflection $interface) {
 			return $interface->getName();
 		}, $class->getInterfaces());
@@ -60,15 +61,15 @@ class SetValueMethodRule implements Rule
 			return [];
 		}
 		if (!$class->hasProperty($fieldName)) {
-			return [sprintf('Entity %s has no property named %s', $varType->getClass(), $fieldName)];
+			return [sprintf('Entity %s has no property named %s', $varType->getClassName(), $fieldName)];
 		}
 		$property = $class->getProperty($fieldName);
 		$propertyType = $property->getType();
 		if (!$propertyType->accepts($valueType)) {
-			return [sprintf('Entity %s: property $%s (%s) does not accept %s', $varType->getClass(), $fieldName, $propertyType->describe(), $valueType->describe())];
+			return [sprintf('Entity %s: property $%s (%s) does not accept %s', $varType->getClassName(), $fieldName, $propertyType->describe(), $valueType->describe())];
 		}
 		if ($node->name === 'setReadOnlyValue' && (!$scope->isInClass() || !$scope->hasVariableType('this') || !$varType->accepts($scope->getVariableType('this')))) {
-			return [sprintf('You cannot set readonly property $%s on entity %s', $fieldName, $varType->getClass())];
+			return [sprintf('You cannot set readonly property $%s on entity %s', $fieldName, $varType->getClassName())];
 		}
 		return [];
 	}

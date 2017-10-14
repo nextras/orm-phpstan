@@ -2,6 +2,11 @@
 
 namespace Nextras\OrmPhpStan\Type;
 
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassConstantReflection;
+use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\PropertyReflection;
+use PHPStan\TrinaryLogic;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\Type;
 
@@ -25,12 +30,6 @@ class HasOneRelationshipType implements Type
 		} else {
 			return $this->originalType->accepts($type);
 		}
-	}
-
-
-	public function getClass()
-	{
-		return $this->originalType->getClass();
 	}
 
 
@@ -70,7 +69,7 @@ class HasOneRelationshipType implements Type
 	}
 
 
-	public function isIterable(): int
+	public function isIterable(): TrinaryLogic
 	{
 		return $this->originalType->isIterable();
 	}
@@ -91,5 +90,70 @@ class HasOneRelationshipType implements Type
 	public static function __set_state(array $properties): Type
 	{
 		return new self($properties['originalType']);
+	}
+
+
+	public function isSupersetOf(Type $type): TrinaryLogic
+	{
+		// trial to fix something
+		if ($type instanceof IntegerType) {
+			return TrinaryLogic::createNo();
+		} else {
+			return $this->originalType->isSupersetOf($type);
+		}
+	}
+
+
+	public function hasProperty(string $propertyName): bool
+	{
+		return $this->originalType->hasProperty($propertyName);
+	}
+
+
+	public function getProperty(string $propertyName, Scope $scope): PropertyReflection
+	{
+		return $this->originalType->getProperty($propertyName, $scope);
+	}
+
+
+	public function hasMethod(string $methodName): bool
+	{
+		return $this->originalType->hasMethod($methodName);
+	}
+
+
+	public function getMethod(string $methodName, Scope $scope): MethodReflection
+	{
+		return $this->originalType->getMethod($methodName, $scope);
+	}
+
+
+	public function canAccessConstants(): bool
+	{
+		return $this->originalType->canAccessConstants();
+	}
+
+
+	public function hasConstant(string $constantName): bool
+	{
+		return $this->originalType->hasConstant($constantName);
+	}
+
+
+	public function getConstant(string $constantName): ClassConstantReflection
+	{
+		return $this->originalType->getConstant($constantName);
+	}
+
+
+	public function isCallable(): TrinaryLogic
+	{
+		return $this->originalType->isCallable();
+	}
+
+
+	public function isClonable(): bool
+	{
+		return $this->originalType->isClonable();
 	}
 }
