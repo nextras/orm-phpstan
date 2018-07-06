@@ -6,3 +6,5 @@
 /testbox/Rules/Test.php:26:Entity NextrasTests\OrmPhpStan\Rules\Entity: property $age (int) does not accept string.
 /testbox/Types/CollectionTypesTest.php:15:Parameter #1 $author of method NextrasTests\OrmPhpStan\Types\CollectionTypesTest::takeAuthor() expects NextrasTests\OrmPhpStan\Types\Author, NextrasTests\OrmPhpStan\Types\Author|null given.
 /testbox/Types/CollectionTypesTest.php:16:Parameter #1 $author of method NextrasTests\OrmPhpStan\Types\CollectionTypesTest::takeAuthor() expects NextrasTests\OrmPhpStan\Types\Author, NextrasTests\OrmPhpStan\Types\Author|null given.
+/testbox/Types/RepositoryTypesTest.php:9:Parameter #1 $author of method NextrasTests\OrmPhpStan\Types\RepositoryTypesTest::takeAuthor() expects NextrasTests\OrmPhpStan\Types\Author, NextrasTests\OrmPhpStan\Types\Author|null given.
+/testbox/Types/RepositoryTypesTest.php:10:Parameter #1 $author of method NextrasTests\OrmPhpStan\Types\RepositoryTypesTest::takeAuthor() expects NextrasTests\OrmPhpStan\Types\Author, NextrasTests\OrmPhpStan\Types\Author|null given.
