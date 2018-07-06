@@ -62,24 +62,28 @@ class SetValueMethodRule implements Rule
 			return [];
 		}
 		if (!$class->hasProperty($fieldName)) {
-			return [sprintf('Entity %s has no property named %s', $varType->getClassName(), $fieldName)];
+			return [sprintf(
+				'Entity %s has no $%s property.',
+				$varType->getClassName(),
+				$fieldName
+			)];
 		}
 		$property = $class->getProperty($fieldName, $scope);
 		$propertyType = $property->getType();
 		if (!$propertyType->accepts($valueType, true)->yes()) {
 			return [sprintf(
-				'Entity %s: property $%s (%s) does not accept %s',
+				'Entity %s: property $%s (%s) does not accept %s.',
 				$varType->getClassName(),
 				$fieldName,
 				$propertyType->describe(VerbosityLevel::typeOnly()),
 				$valueType->describe(VerbosityLevel::typeOnly())
 			)];
 		}
-		if ($methodName === 'setReadOnlyValue' && (!$scope->isInClass() || !$scope->hasVariableType('this') || !$varType->accepts($scope->getVariableType('this'), true)->yes())) {
+		if (!$property->isWritable() && $methodName !== 'setReadOnlyValue') {
 			return [sprintf(
-				'You cannot set readonly property $%s on entity %s',
-				$fieldName,
-				$varType->getClassName()
+				'Entity %s: property $%s is read-only.',
+				$varType->getClassName(),
+				$fieldName
 			)];
 		}
 		return [];

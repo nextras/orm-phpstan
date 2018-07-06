@@ -9,6 +9,7 @@ use DateTimeImmutable;
  * @property int $age
  * @property string $description
  * @property DateTimeImmutable $createdAt
+ * @property-read int $read
  */
 class Entity extends \Nextras\Orm\Entity\Entity
 {
