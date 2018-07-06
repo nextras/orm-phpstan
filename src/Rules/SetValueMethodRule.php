@@ -10,6 +10,7 @@ use PHPStan\Broker\Broker;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Rules\Rule;
 use PHPStan\Type\TypeWithClassName;
+use PHPStan\Type\VerbosityLevel;
 
 
 class SetValueMethodRule implements Rule
@@ -35,8 +36,8 @@ class SetValueMethodRule implements Rule
 	 */
 	public function processNode(Node $node, Scope $scope): array
 	{
-
-		if (!is_string($node->name) || !in_array($node->name, ['setValue', 'setReadOnlyValue'], true)) {
+		$methodName = (string) $node->name;
+		if (!in_array($methodName, ['setValue', 'setReadOnlyValue'], true)) {
 			return [];
 		}
 		$args = $node->args;
@@ -63,13 +64,23 @@ class SetValueMethodRule implements Rule
 		if (!$class->hasProperty($fieldName)) {
 			return [sprintf('Entity %s has no property named %s', $varType->getClassName(), $fieldName)];
 		}
-		$property = $class->getProperty($fieldName);
+		$property = $class->getProperty($fieldName, $scope);
 		$propertyType = $property->getType();
-		if (!$propertyType->accepts($valueType)) {
-			return [sprintf('Entity %s: property $%s (%s) does not accept %s', $varType->getClassName(), $fieldName, $propertyType->describe(), $valueType->describe())];
+		if (!$propertyType->accepts($valueType, true)->yes()) {
+			return [sprintf(
+				'Entity %s: property $%s (%s) does not accept %s',
+				$varType->getClassName(),
+				$fieldName,
+				$propertyType->describe(VerbosityLevel::typeOnly()),
+				$valueType->describe(VerbosityLevel::typeOnly())
+			)];
 		}
-		if ($node->name === 'setReadOnlyValue' && (!$scope->isInClass() || !$scope->hasVariableType('this') || !$varType->accepts($scope->getVariableType('this')))) {
-			return [sprintf('You cannot set readonly property $%s on entity %s', $fieldName, $varType->getClassName())];
+		if ($methodName === 'setReadOnlyValue' && (!$scope->isInClass() || !$scope->hasVariableType('this') || !$varType->accepts($scope->getVariableType('this'), true)->yes())) {
+			return [sprintf(
+				'You cannot set readonly property $%s on entity %s',
+				$fieldName,
+				$varType->getClassName()
+			)];
 		}
 		return [];
 	}
