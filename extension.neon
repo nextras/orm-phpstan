@@ -1,5 +1,9 @@
 services:
 	-
+		class: Nextras\OrmPhpStan\Types\CollectionReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
 		class: Nextras\OrmPhpStan\Rules\SetValueMethodRule
 		tags:
 			- phpstan.rules.rule
