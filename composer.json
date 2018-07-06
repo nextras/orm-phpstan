@@ -6,12 +6,15 @@
 	],
 	"require": {
 		"php": "~7.0",
-		"phpstan/phpstan": "~0.10",
-		"nextras/orm": "~2.2 || ~3.0"
+		"phpstan/phpstan": "~0.10"
 	},
 	"require-dev": {
 		"nette/tester": "~2.0",
-		"mockery/mockery": "~0.9"
+		"mockery/mockery": "~0.9",
+		"nextras/orm": "~3.0"
+	},
+	"conflict": {
+		"nextras/orm": "<3.0.0"
 	},
 	"autoload": {
 		"psr-4": {
