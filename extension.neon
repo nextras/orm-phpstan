@@ -1,10 +1,5 @@
 services:
 	-
-		class: Nextras\OrmPhpStan\Reflection\EntityPropertyReflectionExtension
-		tags:
-			- phpstan.broker.propertiesClassReflectionExtension
-			- phpstan.broker.methodsClassReflectionExtension
-	-
 		class: Nextras\OrmPhpStan\Rules\SetValueMethodRule
 		tags:
 			- phpstan.rules.rule

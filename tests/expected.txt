@@ -1,5 +1,3 @@
-/testbox/Reflection/Test.php:11:Property NextrasTests\OrmPhpStan\Reflection\Entity::$second (NextrasTests\OrmPhpStan\Reflection\SecondEntity|null) does not accept string.
-/testbox/Reflection/Test.php:12:Property NextrasTests\OrmPhpStan\Reflection\Entity::$secondFake (NextrasTests\OrmPhpStan\Reflection\SecondEntity|null) does not accept int.
 /testbox/Rules/Test.php:20:Entity NextrasTests\OrmPhpStan\Rules\Entity: property $age (int) does not accept string
 /testbox/Rules/Test.php:21:Entity NextrasTests\OrmPhpStan\Rules\Entity: property $description (string) does not accept int
 /testbox/Rules/Test.php:22:Entity NextrasTests\OrmPhpStan\Rules\Entity: property $createdAt (DateTimeImmutable) does not accept DateTime
