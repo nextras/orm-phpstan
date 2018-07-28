@@ -36,7 +36,11 @@ class SetValueMethodRule implements Rule
 	 */
 	public function processNode(Node $node, Scope $scope): array
 	{
-		$methodName = (string) $node->name;
+		if (!$node->name instanceof Node\Identifier) {
+			return [];
+		}
+
+		$methodName = $node->name->name;
 		if (!in_array($methodName, ['setValue', 'setReadOnlyValue'], true)) {
 			return [];
 		}
