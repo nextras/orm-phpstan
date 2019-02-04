@@ -83,7 +83,9 @@ class RepositoryReturnTypeExtension implements DynamicMethodReturnTypeExtension
 			$entityType = new ObjectType(IEntity::class);
 		} else {
 			assert($entityClassNameTypes instanceof ConstantArrayType);
-			$classNameType = $entityClassNameTypes->getFirstValueType();
+			$classNameTypes = $entityClassNameTypes->getValueTypes();
+			assert(count($classNameTypes) > 0);
+			$classNameType = $classNameTypes[0];
 			assert($classNameType instanceof ConstantStringType);
 			$entityType = new ObjectType($classNameType->getValue());
 		}
