@@ -54,6 +54,10 @@ class RepositoryReturnTypeExtension implements DynamicMethodReturnTypeExtension
 			'findAll',
 			'findBy',
 			'findById',
+			'persist',
+			'persistAndFlush',
+			'remove',
+			'removeAndFlush',
 		];
 		return in_array($methodReflection->getName(), $methods, true);
 	}
@@ -101,12 +105,21 @@ class RepositoryReturnTypeExtension implements DynamicMethodReturnTypeExtension
 			'getById',
 		];
 
+		static $entityNonNullReturnMethods = [
+			'persist',
+			'persistAndFlush',
+			'remove',
+			'removeAndFlush',
+		];
+
 		$methodName = $methodReflection->getName();
 		if (in_array($methodName, $collectionReturnMethods, true)) {
 			return new IntersectionType([
 				new ObjectType(ICollection::class),
 				new IterableType(new IntegerType(), $entityType),
 			]);
+		} elseif (in_array($methodName, $entityNonNullReturnMethods, true)) {
+			return $entityType;
 		} elseif (in_array($methodName, $entityReturnMethods, true)) {
 			return TypeCombinator::addNull($entityType);
 		}
