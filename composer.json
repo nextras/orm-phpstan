@@ -21,6 +21,8 @@
 			"Nextras\\OrmPhpStan\\": "src/"
 		}
 	},
+	"prefer-stable": true,
+	"minimum-stability": "rc",
 	"autoload-dev": {
 		"classmap": [
 			"tests/"
