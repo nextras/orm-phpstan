@@ -27,5 +27,12 @@
 		"classmap": [
 			"tests/"
 		]
+	},
+	"extra": {
+		"phpstan": {
+			"includes": [
+				"extension.neon"
+			]
+		}
 	}
 }
