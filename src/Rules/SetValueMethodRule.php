@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ExtendedPropertyReflection;
 use PHPStan\Rules\Rule;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\VerbosityLevel;
@@ -73,7 +74,11 @@ class SetValueMethodRule implements Rule
 			)];
 		}
 		$property = $class->getProperty($fieldName, $scope);
-		$propertyType = $property->getType();
+		if ($property instanceof ExtendedPropertyReflection) {
+			$propertyType = $property->getWritableType();
+		} else {
+			$propertyType = $property->getType();
+		}
 		if (!$propertyType->accepts($valueType, true)->yes()) {
 			return [sprintf(
 				'Entity %s: property $%s (%s) does not accept %s.',

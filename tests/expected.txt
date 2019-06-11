@@ -6,6 +6,9 @@
 /testbox/Rules/Test.php:26:Entity NextrasTests\OrmPhpStan\Rules\Entity: property $age (int) does not accept string.
 /testbox/Types/CollectionTypesTest.php:15:Parameter #1 $author of method NextrasTests\OrmPhpStan\Types\CollectionTypesTest::takeAuthor() expects NextrasTests\OrmPhpStan\Types\Author, NextrasTests\OrmPhpStan\Types\Author|null given.
 /testbox/Types/CollectionTypesTest.php:16:Parameter #1 $author of method NextrasTests\OrmPhpStan\Types\CollectionTypesTest::takeAuthor() expects NextrasTests\OrmPhpStan\Types\Author, NextrasTests\OrmPhpStan\Types\Author|null given.
+/testbox/Types/RelationshipPropertyTypesTest.php:11:Parameter #1 $int of method NextrasTests\OrmPhpStan\Types\RelationshipPropertyTypesTest::takeInt() expects int, NextrasTests\OrmPhpStan\Types\Author given.
+/testbox/Types/RelationshipPropertyTypesTest.php:13:Parameter #1 $int of method NextrasTests\OrmPhpStan\Types\RelationshipPropertyTypesTest::takeInt() expects int, NextrasTests\OrmPhpStan\Types\Author given.
+/testbox/Types/RelationshipPropertyTypesTest.php:14:Property NextrasTests\OrmPhpStan\Types\Book::$author (int|NextrasTests\OrmPhpStan\Types\Author) does not accept NextrasTests\OrmPhpStan\Types\Book.
 /testbox/Types/RelationshipTypesTest.php:10:Parameter #1 $book of method NextrasTests\OrmPhpStan\Types\RelationshipTypesTest::takeBook() expects NextrasTests\OrmPhpStan\Types\Book, NextrasTests\OrmPhpStan\Types\Book|null given.
 /testbox/Types/RepositoryTypesTest.php:12:Parameter #1 $author of method NextrasTests\OrmPhpStan\Types\RepositoryTypesTest::takeAuthor() expects NextrasTests\OrmPhpStan\Types\Author, NextrasTests\OrmPhpStan\Types\Author|null given.
 /testbox/Types/RepositoryTypesTest.php:13:Parameter #1 $author of method NextrasTests\OrmPhpStan\Types\RepositoryTypesTest::takeAuthor() expects NextrasTests\OrmPhpStan\Types\Author, NextrasTests\OrmPhpStan\Types\Author|null given.

@@ -12,6 +12,10 @@ services:
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
+		class: Nextras\OrmPhpStan\Reflection\EntityPropertyReflectionExtension
+		tags:
+			- phpstan.broker.propertiesClassReflectionExtension
+	-
 		class: Nextras\OrmPhpStan\Rules\SetValueMethodRule
 		tags:
 			- phpstan.rules.rule
