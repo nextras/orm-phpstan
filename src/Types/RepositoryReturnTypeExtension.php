@@ -3,21 +3,14 @@
 namespace Nextras\OrmPhpStan\Types;
 
 use Nextras\Orm\Collection\ICollection;
-use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Repository\IRepository;
 use Nextras\Orm\Repository\Repository;
-use PhpParser\Node;
+use Nextras\OrmPhpStan\Types\Helpers\RepositoryEntityTypeHelper;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\NodeFinder;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor\NameResolver;
 use PHPStan\Analyser\Scope;
-use PHPStan\Parser\Parser;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\ShouldNotHappenException;
-use PHPStan\Type\Constant\ConstantArrayType;
-use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IntersectionType;
@@ -30,13 +23,13 @@ use PHPStan\Type\TypeWithClassName;
 
 class RepositoryReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
-	/** @var Parser */
-	private $parser;
+	/** @var RepositoryEntityTypeHelper */
+	private $repositoryEntityTypeHelper;
 
 
-	public function __construct(Parser $parser)
+	public function __construct(RepositoryEntityTypeHelper $repositoryEntityTypeHelper)
 	{
-		$this->parser = $parser;
+		$this->repositoryEntityTypeHelper = $repositoryEntityTypeHelper;
 	}
 
 
@@ -77,22 +70,10 @@ class RepositoryReturnTypeExtension implements DynamicMethodReturnTypeExtension
 		}
 
 		$repositoryReflection = new \ReflectionClass($repository->getClassName());
-		$entityClassNameTypes = $this->parseEntityClassNameTypes(
-			$repositoryReflection->getFileName(),
-			$repository->getClassName(),
+		$entityType = $this->repositoryEntityTypeHelper->resolveFirst(
+			$repositoryReflection,
 			$scope
 		);
-
-		if ($entityClassNameTypes === null) {
-			$entityType = new ObjectType(IEntity::class);
-		} else {
-			assert($entityClassNameTypes instanceof ConstantArrayType);
-			$classNameTypes = $entityClassNameTypes->getValueTypes();
-			assert(count($classNameTypes) > 0);
-			$classNameType = $classNameTypes[0];
-			assert($classNameType instanceof ConstantStringType);
-			$entityType = new ObjectType($classNameType->getValue());
-		}
 
 		static $collectionReturnMethods = [
 			'findAll',
@@ -125,44 +106,5 @@ class RepositoryReturnTypeExtension implements DynamicMethodReturnTypeExtension
 		}
 
 		throw new ShouldNotHappenException();
-	}
-
-
-	private function parseEntityClassNameTypes(string $fileName, string $className, Scope $scope): ?Type
-	{
-		$ast = $this->parser->parseFile($fileName);
-
-		$nodeTraverser = new NodeTraverser();
-		$nodeTraverser->addVisitor(new NameResolver());
-		$ast = $nodeTraverser->traverse($ast);
-
-		$nodeFinder = new NodeFinder();
-		$class = $nodeFinder->findFirst($ast, function (Node $node) use ($className) {
-			return $node instanceof Node\Stmt\Class_
-				&& $node->namespacedName->toString() === $className;
-		});
-
-		if ($class === null) {
-			return null;
-		}
-
-		$method = $nodeFinder->findFirst($class, function (Node $node) {
-			return $node instanceof Node\Stmt\ClassMethod
-				&& $node->name->name === 'getEntityClassNames';
-		});
-
-		if ($method === null) {
-			return null;
-		}
-
-		$return = $nodeFinder->findFirst($method, function (Node $node) {
-			return $node instanceof Node\Stmt\Return_;
-		});
-
-		if ($return instanceof Node\Stmt\Return_) {
-			return $scope->getType($return->expr);
-		} else {
-			return null;
-		}
 	}
 }

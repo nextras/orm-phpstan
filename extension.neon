@@ -19,3 +19,5 @@ services:
 		class: Nextras\OrmPhpStan\Rules\SetValueMethodRule
 		tags:
 			- phpstan.rules.rule
+
+	- Nextras\OrmPhpStan\Types\Helpers\RepositoryEntityTypeHelper
