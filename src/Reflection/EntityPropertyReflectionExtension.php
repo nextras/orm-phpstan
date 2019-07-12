@@ -36,6 +36,10 @@ class EntityPropertyReflectionExtension implements PropertiesClassReflectionExte
 		}, $classReflection->getInterfaces());
 
 		$phpDoc = $classReflection->getNativeReflection()->getDocComment();
+		if (!$phpDoc) {
+			return false;
+		}
+
 		$hasRelationship = preg_match('#\$' . $propertyName . '\s(?:[^\n]*)\{[1m]:1.+\}.*$#m', $phpDoc) === 1;
 		return in_array(IEntity::class, $interfaces, true) && $hasRelationship;
 	}
