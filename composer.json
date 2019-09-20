@@ -1,6 +1,7 @@
 {
 	"name": "nextras/orm-phpstan",
 	"description": "PhpStan extension for Nextras Orm",
+	"type": "phpstan-extension",
 	"license": [
 		"MIT"
 	],
