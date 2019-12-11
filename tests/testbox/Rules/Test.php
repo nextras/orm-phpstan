@@ -5,7 +5,7 @@ namespace NextrasTests\OrmPhpStan\Rules;
 
 class Test
 {
-	public function testOk()
+	public function testOk(): void
 	{
 		$entity = new Entity();
 		$entity->setValue('age', 1);
@@ -15,7 +15,7 @@ class Test
 	}
 
 
-	public function testError()
+	public function testError(): void
 	{
 		$entity = new Entity();
 		$entity->setValue('age', '');

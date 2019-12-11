@@ -69,7 +69,10 @@ class RepositoryReturnTypeExtension implements DynamicMethodReturnTypeExtension
 			return ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType();
 		}
 
-		$repositoryReflection = new \ReflectionClass($repository->getClassName());
+		/** @phpstan-var class-string<Repository> $repositoryClassName */
+		$repositoryClassName = $repository->getClassName();
+		assert(class_exists($repositoryClassName));
+		$repositoryReflection = new \ReflectionClass($repositoryClassName);
 		$entityType = $this->repositoryEntityTypeHelper->resolveFirst(
 			$repositoryReflection,
 			$scope

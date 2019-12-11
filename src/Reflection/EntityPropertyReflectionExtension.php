@@ -50,8 +50,8 @@ class EntityPropertyReflectionExtension implements PropertiesClassReflectionExte
 		$property = $this->annotationsExtension->getProperty($classReflection, $propertyName);
 		return new AnnotationPropertyReflection(
 			$property->getDeclaringClass(),
-			$property->getType(),
-			TypeCombinator::union($property->getType(), new IntegerType()),
+			$property->getReadableType(),
+			TypeCombinator::union($property->getWritableType(), new IntegerType()),
 			$property->isReadable(),
 			$property->isWritable()
 		);

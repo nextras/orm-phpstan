@@ -21,6 +21,7 @@ before_script:
 
 script:
     - ./vendor/bin/tester ./tests/test.php
+    - ./vendor/bin/phpstan analyse
 
 after_failure:
     # Print *.actual content & log content

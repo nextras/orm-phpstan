@@ -10,7 +10,7 @@ class CollectionTypesTest
 	/**
 	 * @param Author[]|ICollection $collection
 	 */
-	public function testError($collection)
+	public function testError($collection): void
 	{
 		$this->takeAuthor($collection->getById(1));
 		$this->takeAuthor($collection->getBy([]));
@@ -20,7 +20,7 @@ class CollectionTypesTest
 	/**
 	 * @param Author[]|ICollection $collection
 	 */
-	public function testOk($collection)
+	public function testOk($collection): void
 	{
 		$this->takeAuthorNullable($collection->getById(1));
 		$this->takeAuthorNullable($collection->getBy([]));
@@ -30,12 +30,12 @@ class CollectionTypesTest
 	}
 
 
-	private function takeAuthor(Author $author)
+	private function takeAuthor(Author $author): void
 	{
 	}
 
 
-	private function takeAuthorNullable(?Author $author)
+	private function takeAuthorNullable(?Author $author): void
 	{
 	}
 
@@ -43,7 +43,7 @@ class CollectionTypesTest
 	/**
 	 * @param array<int, Author> $authors
 	 */
-	private function takeAuthorArray($authors)
+	private function takeAuthorArray($authors): void
 	{
 	}
 }

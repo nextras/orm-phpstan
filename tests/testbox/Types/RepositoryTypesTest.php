@@ -7,7 +7,7 @@ use Nextras\Orm\Entity\IEntity;
 
 class RepositoryTypesTest
 {
-	public function testError(AuthorsRepository $repository, BooksRepository $booksRepository)
+	public function testError(AuthorsRepository $repository, BooksRepository $booksRepository): void
 	{
 		$this->takeAuthor($repository->getById(1));
 		$this->takeAuthor($repository->getBy([]));
@@ -18,7 +18,7 @@ class RepositoryTypesTest
 	}
 
 
-	public function testOk(AuthorsRepository $repository)
+	public function testOk(AuthorsRepository $repository): void
 	{
 		$this->takeAuthorNullable($repository->getById(1));
 		$this->takeAuthorNullable($repository->getBy([]));
@@ -33,12 +33,12 @@ class RepositoryTypesTest
 	}
 
 
-	private function takeAuthor(Author $author)
+	private function takeAuthor(Author $author): void
 	{
 	}
 
 
-	private function takeAuthorNullable(?Author $author)
+	private function takeAuthorNullable(?Author $author): void
 	{
 	}
 
@@ -46,7 +46,7 @@ class RepositoryTypesTest
 	/**
 	 * @param array<int, Author> $authors
 	 */
-	private function takeAuthorArray($authors)
+	private function takeAuthorArray($authors): void
 	{
 	}
 }
