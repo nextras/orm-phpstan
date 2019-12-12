@@ -10,7 +10,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 Environment::setup();
 
-$command = __DIR__ . '/../vendor/bin/phpstan analyze --no-progress -l 7 -c ' . __DIR__ . '/config.neon --error-format rawSimple ' . __DIR__ . '/testbox';
+$command = __DIR__ . '/../vendor/bin/phpstan analyze --no-progress -l max -c ' . __DIR__ . '/config.neon --error-format rawSimple ' . __DIR__ . '/testbox';
 exec($command, $o);
 $actual = trim(implode("\n", $o));
 $expected = trim(file_get_contents(__DIR__ . '/expected.txt'));

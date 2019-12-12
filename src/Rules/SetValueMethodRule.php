@@ -8,12 +8,13 @@ use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\ExtendedPropertyReflection;
 use PHPStan\Rules\Rule;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\VerbosityLevel;
 
-
+/**
+ * @phpstan-implements Rule<MethodCall>
+ */
 class SetValueMethodRule implements Rule
 {
 	/** @var Broker */
@@ -34,6 +35,8 @@ class SetValueMethodRule implements Rule
 
 	/**
 	 * @param MethodCall $node
+	 *
+	 * @return string[]
 	 */
 	public function processNode(Node $node, Scope $scope): array
 	{
@@ -74,11 +77,7 @@ class SetValueMethodRule implements Rule
 			)];
 		}
 		$property = $class->getProperty($fieldName, $scope);
-		if ($property instanceof ExtendedPropertyReflection) {
-			$propertyType = $property->getWritableType();
-		} else {
-			$propertyType = $property->getType();
-		}
+		$propertyType = $property->getWritableType();
 		if (!$propertyType->accepts($valueType, true)->yes()) {
 			return [sprintf(
 				'Entity %s: property $%s (%s) does not accept %s.',

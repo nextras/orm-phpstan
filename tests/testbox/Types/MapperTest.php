@@ -5,14 +5,14 @@ namespace NextrasTests\OrmPhpStan\Types;
 
 class MapperTest extends AuthorsMapper
 {
-	public function testOk()
+	public function testOk(): void
 	{
 		$this->takeAuthors($this->toCollection([]));
 		$this->takeAuthor($this->toEntity([]));
 	}
 
 
-	private function takeAuthor(?Author $author)
+	private function takeAuthor(?Author $author): void
 	{
 	}
 
@@ -20,7 +20,7 @@ class MapperTest extends AuthorsMapper
 	/**
 	 * @param iterable<int, Author> $authors
 	 */
-	private function takeAuthors($authors)
+	private function takeAuthors($authors): void
 	{
 	}
 }

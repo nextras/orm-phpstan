@@ -5,7 +5,7 @@ namespace NextrasTests\OrmPhpStan\Types;
 
 class RelationshipPropertyTypesTest
 {
-	public function testError(Book $book)
+	public function testError(Book $book): void
 	{
 		$book->author = 1;
 		$this->takeInt($book->author);
@@ -15,7 +15,7 @@ class RelationshipPropertyTypesTest
 	}
 
 
-	public function testOk(Book $book)
+	public function testOk(Book $book): void
 	{
 		$book->author = 1;
 		$this->takeAuthor($book->author);
@@ -24,12 +24,12 @@ class RelationshipPropertyTypesTest
 	}
 
 
-	private function takeAuthor(Author $author)
+	private function takeAuthor(Author $author): void
 	{
 	}
 
 
-	private function takeInt(int $int)
+	private function takeInt(int $int): void
 	{
 	}
 }

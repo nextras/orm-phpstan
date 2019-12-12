@@ -2,13 +2,13 @@
 
 namespace Nextras\OrmPhpStan\Reflection\Annotations;
 
+use PHPStan\Reflection\Annotations\AnnotationPropertyReflection as PHPStanAnnotationPropertyReflection;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\ExtendedPropertyReflection;
+use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Type\Type;
 
 
-class AnnotationPropertyReflection extends \PHPStan\Reflection\Annotations\AnnotationPropertyReflection
-	implements ExtendedPropertyReflection
+class AnnotationPropertyReflection extends PHPStanAnnotationPropertyReflection implements PropertyReflection
 {
 	/** @var Type */
 	private $writableType;

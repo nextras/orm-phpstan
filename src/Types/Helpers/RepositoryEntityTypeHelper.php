@@ -8,7 +8,7 @@ use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PHPStan\Analyser\Scope;
-use PhpStan\Parser\Parser;
+use PHPStan\Parser\Parser;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ObjectType;
@@ -26,7 +26,9 @@ class RepositoryEntityTypeHelper
 		$this->parser = $parser;
 	}
 
-
+	/**
+	 * @phpstan-param \ReflectionClass<\Nextras\Orm\Repository\Repository> $repositoryReflection
+	 */
 	public function resolveFirst(\ReflectionClass $repositoryReflection, Scope $scope): Type
 	{
 		$entityClassNameTypes = $this->parseEntityClassNameTypes($repositoryReflection, $scope);
@@ -43,11 +45,15 @@ class RepositoryEntityTypeHelper
 		}
 	}
 
-
+	/**
+	 * @phpstan-param \ReflectionClass<\Nextras\Orm\Repository\Repository> $repositoryReflection
+	 */
 	private function parseEntityClassNameTypes(\ReflectionClass $repositoryReflection, Scope $scope): ?Type
 	{
 		$className = $repositoryReflection->getName();
 		$fileName = $repositoryReflection->getFileName();
+
+		assert($fileName !== false, sprintf('File for clsas "%s" does not exists.', $className));
 
 		$ast = $this->parser->parseFile($fileName);
 
@@ -78,7 +84,7 @@ class RepositoryEntityTypeHelper
 			return $node instanceof Node\Stmt\Return_;
 		});
 
-		if ($return instanceof Node\Stmt\Return_) {
+		if ($return instanceof Node\Stmt\Return_ && $return->expr !== null) {
 			return $scope->getType($return->expr);
 		} else {
 			return null;
