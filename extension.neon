@@ -8,6 +8,14 @@ services:
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
+		class: Nextras\OrmPhpStan\Types\ModelGetRepositoryReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
+		class: Nextras\OrmPhpStan\Types\ModelGetRepositoryForEntityReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
 		class: Nextras\OrmPhpStan\Types\RelationshipReturnTypeExtension
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
