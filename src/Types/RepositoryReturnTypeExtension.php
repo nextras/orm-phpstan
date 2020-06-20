@@ -49,7 +49,9 @@ class RepositoryReturnTypeExtension implements DynamicMethodReturnTypeExtension
 	{
 		static $methods = [
 			'getBy',
+			'getByChecked',
 			'getById',
+			'getByIdChecked',
 			'findAll',
 			'findBy',
 			'findById',
@@ -101,6 +103,8 @@ class RepositoryReturnTypeExtension implements DynamicMethodReturnTypeExtension
 		];
 
 		static $entityNonNullReturnMethods = [
+			'getByChecked',
+			'getByIdChecked',
 			'persist',
 			'persistAndFlush',
 			'remove',

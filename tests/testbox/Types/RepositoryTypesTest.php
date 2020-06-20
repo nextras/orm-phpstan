@@ -20,6 +20,8 @@ class RepositoryTypesTest
 
 	public function testOk(AuthorsRepository $repository): void
 	{
+		$this->takeAuthor($repository->getByIdChecked(1));
+		$this->takeAuthor($repository->getByChecked(['id' => 1]));
 		$this->takeAuthorNullable($repository->getById(1));
 		$this->takeAuthorNullable($repository->getBy([]));
 		$this->takeAuthorNullable($repository->findAll()->fetch());
