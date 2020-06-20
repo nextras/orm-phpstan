@@ -11,10 +11,8 @@
 	},
 	"require-dev": {
 		"nette/tester": "~2.0",
-		"nextras/orm": "~3.0"
-	},
-	"conflict": {
-		"nextras/orm": "<3.0.0"
+		"nextras/orm": "~4.0@dev",
+		"nextras/dbal": "~4.0@dev"
 	},
 	"autoload": {
 		"psr-4": {
