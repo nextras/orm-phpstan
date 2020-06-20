@@ -28,12 +28,13 @@ class CollectionReturnTypeExtension implements DynamicMethodReturnTypeExtension
 	{
 		static $methods = [
 			'getBy',
+			'getByChecked',
 			'getById',
+			'getByIdChecked',
 			'findBy',
 			'orderBy',
 			'resetOrderBy',
 			'limitBy',
-			'applyFunction',
 			'fetch',
 			'fetchAll',
 		];
@@ -59,7 +60,6 @@ class CollectionReturnTypeExtension implements DynamicMethodReturnTypeExtension
 			'orderBy',
 			'resetOrderBy',
 			'limitBy',
-			'applyFunction',
 		];
 
 		static $entityReturnMethods = [
@@ -68,11 +68,19 @@ class CollectionReturnTypeExtension implements DynamicMethodReturnTypeExtension
 			'fetch',
 		];
 
+		static $entityNonNullReturnMethods = [
+			'getByChecked',
+			'getByIdChecked',
+		];
+
 		if (in_array($methodName, $collectionReturnMethods, true)) {
 			return $varType;
 
 		} elseif (in_array($methodName, $entityReturnMethods, true)) {
 			return TypeCombinator::addNull($varType->getIterableValueType());
+
+		} elseif (in_array($methodName, $entityNonNullReturnMethods, true)) {
+			return $varType->getIterableValueType();
 
 		} elseif ($methodName === 'fetchAll') {
 			return new ArrayType(new IntegerType(), $varType->getIterableValueType());

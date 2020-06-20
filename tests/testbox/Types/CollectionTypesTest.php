@@ -22,10 +22,14 @@ class CollectionTypesTest
 	 */
 	public function testOk($collection): void
 	{
+		$this->takeAuthor($collection->getByIdChecked(1));
+		$this->takeAuthor($collection->getByChecked(['id' => 1]));
 		$this->takeAuthorNullable($collection->getById(1));
 		$this->takeAuthorNullable($collection->getBy([]));
 		$this->takeAuthorNullable($collection->findBy([])->getById(1));
 		$this->takeAuthorNullable($collection->findBy([])->orderBy([])->limitBy(2, 0)->getById(1));
+		$this->takeAuthor($collection->findBy([])->getByIdChecked(1));
+		$this->takeAuthor($collection->findBy([])->orderBy([])->limitBy(2, 0)->getByIdChecked(1));
 		$this->takeAuthorArray($collection->fetchAll());
 	}
 
