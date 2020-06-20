@@ -63,11 +63,10 @@ class MapperMethodReturnTypeExtension implements DynamicMethodReturnTypeExtensio
 	): Type
 	{
 		$mapper = $scope->getType($methodCall->var);
-		\assert($mapper instanceof TypeWithClassName);
 
 		$defaultReturn = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType();
 
-		if ($mapper->getClassName() === DbalMapper::class) {
+		if (!$mapper instanceof TypeWithClassName || $mapper->getClassName() === DbalMapper::class) {
 			return $defaultReturn;
 		}
 
