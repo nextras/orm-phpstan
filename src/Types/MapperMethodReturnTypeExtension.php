@@ -7,8 +7,10 @@ use Nextras\Orm\Mapper\Dbal\DbalMapper;
 use Nextras\OrmPhpStan\Types\Helpers\RepositoryEntityTypeHelper;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
+use PHPStan\Broker\ClassNotFoundException;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\IntegerType;
@@ -24,10 +26,17 @@ class MapperMethodReturnTypeExtension implements DynamicMethodReturnTypeExtensio
 	/** @var RepositoryEntityTypeHelper */
 	private $repositoryEntityTypeHelper;
 
+	/** @var ReflectionProvider */
+	private $reflectionProvider;
 
-	public function __construct(RepositoryEntityTypeHelper $repositoryEntityTypeHelper)
+
+	public function __construct(
+		RepositoryEntityTypeHelper $repositoryEntityTypeHelper,
+		ReflectionProvider $reflectionProvider
+	)
 	{
 		$this->repositoryEntityTypeHelper = $repositoryEntityTypeHelper;
+		$this->reflectionProvider = $reflectionProvider;
 	}
 
 
@@ -71,13 +80,13 @@ class MapperMethodReturnTypeExtension implements DynamicMethodReturnTypeExtensio
 		} while (!\class_exists($repositoryClass) && $mapperClass !== DbalMapper::class);
 
 		try {
-			$repository = new \ReflectionClass($repositoryClass);
-		} catch (\ReflectionException $e) {
+			$repositoryReflection = $this->reflectionProvider->getClass($repositoryClass);
+		} catch (ClassNotFoundException $e) {
 			return $defaultReturn;
 		}
 
 		$entityType = $this->repositoryEntityTypeHelper->resolveFirst(
-			$repository,
+			$repositoryReflection,
 			$scope
 		);
 

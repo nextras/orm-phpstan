@@ -8,8 +8,10 @@ use Nextras\Orm\Repository\Repository;
 use Nextras\OrmPhpStan\Types\Helpers\RepositoryEntityTypeHelper;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
+use PHPStan\Broker\ClassNotFoundException;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\IntegerType;
@@ -26,10 +28,14 @@ class RepositoryReturnTypeExtension implements DynamicMethodReturnTypeExtension
 	/** @var RepositoryEntityTypeHelper */
 	private $repositoryEntityTypeHelper;
 
+	/** @var ReflectionProvider */
+	private $reflectionProvider;
 
-	public function __construct(RepositoryEntityTypeHelper $repositoryEntityTypeHelper)
+
+	public function __construct(RepositoryEntityTypeHelper $repositoryEntityTypeHelper, ReflectionProvider $reflectionProvider)
 	{
 		$this->repositoryEntityTypeHelper = $repositoryEntityTypeHelper;
+		$this->reflectionProvider = $reflectionProvider;
 	}
 
 
@@ -71,8 +77,13 @@ class RepositoryReturnTypeExtension implements DynamicMethodReturnTypeExtension
 
 		/** @phpstan-var class-string<Repository> $repositoryClassName */
 		$repositoryClassName = $repository->getClassName();
-		assert(class_exists($repositoryClassName));
-		$repositoryReflection = new \ReflectionClass($repositoryClassName);
+
+		try {
+			$repositoryReflection = $this->reflectionProvider->getClass($repositoryClassName);
+		} catch (ClassNotFoundException $e) {
+			return ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType();
+		}
+
 		$entityType = $this->repositoryEntityTypeHelper->resolveFirst(
 			$repositoryReflection,
 			$scope

@@ -9,6 +9,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PHPStan\Analyser\Scope;
 use PHPStan\Parser\Parser;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ObjectType;
@@ -26,10 +27,7 @@ class RepositoryEntityTypeHelper
 		$this->parser = $parser;
 	}
 
-	/**
-	 * @phpstan-param \ReflectionClass<\Nextras\Orm\Repository\Repository> $repositoryReflection
-	 */
-	public function resolveFirst(\ReflectionClass $repositoryReflection, Scope $scope): Type
+	public function resolveFirst(ClassReflection $repositoryReflection, Scope $scope): Type
 	{
 		$entityClassNameTypes = $this->parseEntityClassNameTypes($repositoryReflection, $scope);
 
@@ -45,10 +43,7 @@ class RepositoryEntityTypeHelper
 		}
 	}
 
-	/**
-	 * @phpstan-param \ReflectionClass<\Nextras\Orm\Repository\Repository> $repositoryReflection
-	 */
-	private function parseEntityClassNameTypes(\ReflectionClass $repositoryReflection, Scope $scope): ?Type
+	private function parseEntityClassNameTypes(ClassReflection $repositoryReflection, Scope $scope): ?Type
 	{
 		$className = $repositoryReflection->getName();
 		$fileName = $repositoryReflection->getFileName();
