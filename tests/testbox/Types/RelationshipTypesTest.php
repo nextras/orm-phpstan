@@ -7,14 +7,14 @@ class RelationshipTypesTest
 {
 	public function testError(Author $author): void
 	{
-		$this->takeBook($author->books->get()->fetch());
+		$this->takeBook($author->books->toCollection()->fetch());
 	}
 
 
 	public function testOk(Author $author): void
 	{
-		$this->takeBookNullable($author->books->get()->fetch());
-		$this->takeBookNullable($author->books->get()->findBy([])->fetch());
+		$this->takeBookNullable($author->books->toCollection()->fetch());
+		$this->takeBookNullable($author->books->toCollection()->findBy([])->fetch());
 	}
 
 

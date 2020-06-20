@@ -26,7 +26,7 @@ class RelationshipReturnTypeExtension implements DynamicMethodReturnTypeExtensio
 
 	public function isMethodSupported(MethodReflection $methodReflection): bool
 	{
-		return $methodReflection->getName() === 'get';
+		return $methodReflection->getName() === 'get' || $methodReflection->getName() === 'toCollection';
 	}
 
 
