@@ -48,13 +48,6 @@ class CollectionReturnTypeExtension implements DynamicMethodReturnTypeExtension
 		Scope $scope
 	): Type
 	{
-		$varType = $scope->getType($methodCall->var);
-		$methodName = $methodReflection->getName();
-
-		if (!$varType instanceof IntersectionType) {
-			return ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType();
-		}
-
 		static $collectionReturnMethods = [
 			'findBy',
 			'orderBy',
@@ -72,6 +65,17 @@ class CollectionReturnTypeExtension implements DynamicMethodReturnTypeExtension
 			'getByChecked',
 			'getByIdChecked',
 		];
+
+		$varType = $scope->getType($methodCall->var);
+		$methodName = $methodReflection->getName();
+
+		if (!$varType instanceof IntersectionType) {
+			if (in_array($methodName, $collectionReturnMethods, true)) {
+				return $varType;
+			} else {
+				return ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType();
+			}
+		}
 
 		if (in_array($methodName, $collectionReturnMethods, true)) {
 			return $varType;
