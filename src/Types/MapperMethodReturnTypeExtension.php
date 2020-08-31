@@ -70,11 +70,20 @@ class MapperMethodReturnTypeExtension implements DynamicMethodReturnTypeExtensio
 			return $defaultReturn;
 		}
 
-		$mapperClass = $mapper->getClassName();
+		$currentMapper = $this->reflectionProvider->getClass($mapper->getClassName());
+		assert($currentMapper !== false);
+
 		do {
+			$mapperClass = $currentMapper->getName();
 			/** @phpstan-var class-string<\Nextras\Orm\Repository\Repository> $repositoryClass */
 			$repositoryClass = \str_replace('Mapper', 'Repository', $mapperClass);
-			$mapperClass = \get_parent_class($mapperClass);
+
+			$currentMapper = $this->reflectionProvider->getClass($mapperClass)->getParentClass();
+			if ($currentMapper === false) {
+				break;
+			}
+			$mapperClass = $currentMapper->getName();
+
 			assert(is_string($mapperClass));
 		} while (!\class_exists($repositoryClass) && $mapperClass !== DbalMapper::class);
 
