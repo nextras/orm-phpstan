@@ -31,5 +31,8 @@
 				"extension.neon"
 			]
 		}
+	},
+	"scripts": {
+		"tests": "tester ./tests/test.php && phpstan analyze"
 	}
 }
