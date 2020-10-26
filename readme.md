@@ -1,8 +1,7 @@
 PHPStan for Nextras Orm
 =======================
 
-[![Build Status](https://travis-ci.org/nextras/orm-phpstan.svg?branch=master)](https://travis-ci.org/nextras/orm-phpstan)
-
+[![Build Status](https://github.com/nextras/orm-phpstan/workflows/Build/badge.svg?branch=master)](https://github.com/nextras/orm-phpstan/actions?query=workflow%3ABuild+branch%3Amaster)
 
 PHPStan extension for Nextras Orm.
 
