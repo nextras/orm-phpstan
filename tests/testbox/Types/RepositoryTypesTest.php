@@ -32,6 +32,13 @@ class RepositoryTypesTest
 		/** @var IEntity $a */
 		$a = $repository->getById(1);
 		$this->takeAuthor($repository->persist($a));
+		
+		
+		/** @var AuthorsRepository|BooksRepository $someRepo */
+		$someRepo = $repository;
+		foreach ($someRepo->findAll() as $ent) {
+		
+		}
 	}
 
 
