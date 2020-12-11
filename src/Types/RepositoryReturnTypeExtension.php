@@ -17,10 +17,13 @@ use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\IterableType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\TypeWithClassName;
+use PHPStan\Type\UnionType;
 
 
 class RepositoryReturnTypeExtension implements DynamicMethodReturnTypeExtension
@@ -32,7 +35,10 @@ class RepositoryReturnTypeExtension implements DynamicMethodReturnTypeExtension
 	private $reflectionProvider;
 
 
-	public function __construct(RepositoryEntityTypeHelper $repositoryEntityTypeHelper, ReflectionProvider $reflectionProvider)
+	public function __construct(
+		RepositoryEntityTypeHelper $repositoryEntityTypeHelper,
+		ReflectionProvider $reflectionProvider
+	)
 	{
 		$this->repositoryEntityTypeHelper = $repositoryEntityTypeHelper;
 		$this->reflectionProvider = $reflectionProvider;
@@ -71,14 +77,37 @@ class RepositoryReturnTypeExtension implements DynamicMethodReturnTypeExtension
 	): Type
 	{
 		$repository = $scope->getType($methodCall->var);
-		\assert($repository instanceof TypeWithClassName);
+		$repositoryType = new ObjectType(IRepository::class);
+		return TypeTraverser::map(
+			$repository,
+			function ($type, $traverse) use ($repositoryType, $methodReflection, $scope): Type {
+				if ($type instanceof UnionType || $type instanceof IntersectionType) {
+					return $traverse($type);
+				}
+				if (!$type instanceof TypeWithClassName || $repositoryType->isSuperTypeOf($type)->no()) {
+					return new MixedType();
+				}
 
-		if ($repository->getClassName() === Repository::class) {
+				/** @var class-string<Repository> $repositoryClassName */
+				$repositoryClassName = $type->getClassName();
+				return $this->getEntityTypeFromMethodClass($repositoryClassName, $methodReflection, $scope);
+			}
+		);
+	}
+
+
+	/**
+	 * @param class-string<Repository> $repositoryClassName
+	 */
+	private function getEntityTypeFromMethodClass(
+		string $repositoryClassName,
+		MethodReflection $methodReflection,
+		Scope $scope
+	): Type
+	{
+		if ($repositoryClassName === Repository::class) {
 			return ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType();
 		}
-
-		/** @phpstan-var class-string<Repository> $repositoryClassName */
-		$repositoryClassName = $repository->getClassName();
 
 		try {
 			$repositoryReflection = $this->reflectionProvider->getClass($repositoryClassName);

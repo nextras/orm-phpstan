@@ -32,6 +32,16 @@ class RepositoryTypesTest
 		/** @var IEntity $a */
 		$a = $repository->getById(1);
 		$this->takeAuthor($repository->persist($a));
+
+		/** @var AuthorsRepository|BooksRepository $someRepo */
+		$someRepo = $repository;
+		foreach ($someRepo->findAll() as $entity) {
+			if ($entity instanceof Author) {
+				$this->takeAuthor($entity);
+			} else {
+				$this->takeBook($entity);
+			}
+		}
 	}
 
 
@@ -49,6 +59,11 @@ class RepositoryTypesTest
 	 * @param array<int, Author> $authors
 	 */
 	private function takeAuthorArray($authors): void
+	{
+	}
+
+
+	private function takeBook(Book $book): void
 	{
 	}
 }
