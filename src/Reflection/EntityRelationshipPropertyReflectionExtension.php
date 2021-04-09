@@ -12,7 +12,7 @@ use PHPStan\Type\IntegerType;
 use PHPStan\Type\TypeCombinator;
 
 
-class EntityPropertyReflectionExtension implements PropertiesClassReflectionExtension
+class EntityRelationshipPropertyReflectionExtension implements PropertiesClassReflectionExtension
 {
 	/** @var AnnotationsPropertiesClassReflectionExtension */
 	private $annotationsExtension;
@@ -34,6 +34,9 @@ class EntityPropertyReflectionExtension implements PropertiesClassReflectionExte
 		$interfaces = array_map(function (ClassReflection $interface) {
 			return $interface->getName();
 		}, $classReflection->getInterfaces());
+		if (!in_array(IEntity::class, $interfaces, true)) {
+			return false;
+		}
 
 		$phpDoc = $classReflection->getNativeReflection()->getDocComment();
 		if (!$phpDoc) {
@@ -41,7 +44,7 @@ class EntityPropertyReflectionExtension implements PropertiesClassReflectionExte
 		}
 
 		$hasRelationship = preg_match('#\$' . $propertyName . '\s(?:[^\n]*)\{[1m]:1.+\}.*$#m', $phpDoc) === 1;
-		return in_array(IEntity::class, $interfaces, true) && $hasRelationship;
+		return $hasRelationship;
 	}
 
 
