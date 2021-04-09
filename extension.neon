@@ -20,6 +20,10 @@ services:
 		tags:
 			- phpstan.broker.propertiesClassReflectionExtension
 	-
+		class: Nextras\OrmPhpStan\Reflection\EntityDateTimePropertyReflectionExtension
+		tags:
+			- phpstan.broker.propertiesClassReflectionExtension
+	-
 		class: Nextras\OrmPhpStan\Rules\SetValueMethodRule
 		tags:
 			- phpstan.rules.rule

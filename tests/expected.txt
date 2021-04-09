@@ -1,11 +1,12 @@
 /testbox/Rules/Test.php:21:Entity NextrasTests\OrmPhpStan\Rules\Entity: property $age (int) does not accept string.
 /testbox/Rules/Test.php:22:Entity NextrasTests\OrmPhpStan\Rules\Entity: property $description (string) does not accept int.
-/testbox/Rules/Test.php:23:Entity NextrasTests\OrmPhpStan\Rules\Entity: property $createdAt (DateTimeImmutable) does not accept DateTime.
+/testbox/Rules/Test.php:23:Entity NextrasTests\OrmPhpStan\Rules\Entity: property $createdAt (DateTimeImmutable|string) does not accept DateTime.
 /testbox/Rules/Test.php:24:Entity NextrasTests\OrmPhpStan\Rules\Entity has no $foo property.
 /testbox/Rules/Test.php:25:Entity NextrasTests\OrmPhpStan\Rules\Entity: property $read is read-only.
 /testbox/Rules/Test.php:26:Entity NextrasTests\OrmPhpStan\Rules\Entity: property $age (int) does not accept string.
 /testbox/Types/CollectionTypesTest.php:15:Parameter #1 $author of method NextrasTests\OrmPhpStan\Types\CollectionTypesTest::takeAuthor() expects NextrasTests\OrmPhpStan\Types\Author, NextrasTests\OrmPhpStan\Types\Author|null given.
 /testbox/Types/CollectionTypesTest.php:16:Parameter #1 $author of method NextrasTests\OrmPhpStan\Types\CollectionTypesTest::takeAuthor() expects NextrasTests\OrmPhpStan\Types\Author, NextrasTests\OrmPhpStan\Types\Author|null given.
+/testbox/Types/DateTimePropertyTypesTest.php:9:Property NextrasTests\OrmPhpStan\Types\Book::$date (DateTimeImmutable|string|null) does not accept int.
 /testbox/Types/RelationshipPropertyTypesTest.php:11:Parameter #1 $int of method NextrasTests\OrmPhpStan\Types\RelationshipPropertyTypesTest::takeInt() expects int, NextrasTests\OrmPhpStan\Types\Author given.
 /testbox/Types/RelationshipPropertyTypesTest.php:13:Parameter #1 $int of method NextrasTests\OrmPhpStan\Types\RelationshipPropertyTypesTest::takeInt() expects int, NextrasTests\OrmPhpStan\Types\Author given.
 /testbox/Types/RelationshipPropertyTypesTest.php:14:Property NextrasTests\OrmPhpStan\Types\Book::$author (int|NextrasTests\OrmPhpStan\Types\Author) does not accept NextrasTests\OrmPhpStan\Types\Book.
