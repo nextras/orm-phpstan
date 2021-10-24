@@ -3,3 +3,5 @@ parameters:
     paths:
         - src
         - tests/RawSimpleErrorFormatter.php
+    ignoreErrors:
+        - '~is not covered by backward compatibility promise~'

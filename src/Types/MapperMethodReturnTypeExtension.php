@@ -71,7 +71,6 @@ class MapperMethodReturnTypeExtension implements DynamicMethodReturnTypeExtensio
 		}
 
 		$currentMapper = $this->reflectionProvider->getClass($mapper->getClassName());
-		assert($currentMapper !== false);
 
 		do {
 			$mapperClass = $currentMapper->getName();
@@ -79,7 +78,7 @@ class MapperMethodReturnTypeExtension implements DynamicMethodReturnTypeExtensio
 			$repositoryClass = \str_replace('Mapper', 'Repository', $mapperClass);
 
 			$currentMapper = $this->reflectionProvider->getClass($mapperClass)->getParentClass();
-			if ($currentMapper === false) {
+			if ($currentMapper === null) {
 				break;
 			}
 			$mapperClass = $currentMapper->getName();

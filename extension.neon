@@ -28,4 +28,4 @@ services:
 		tags:
 			- phpstan.rules.rule
 
-	- Nextras\OrmPhpStan\Types\Helpers\RepositoryEntityTypeHelper
+	- Nextras\OrmPhpStan\Types\Helpers\RepositoryEntityTypeHelper(@currentPhpVersionSimpleDirectParser)

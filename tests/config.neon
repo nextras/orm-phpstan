@@ -1,5 +1,5 @@
 parameters:
-	autoload_directories:
+	scanDirectories:
 		- %rootDir%/../../../tests/testbox
 
 services:
