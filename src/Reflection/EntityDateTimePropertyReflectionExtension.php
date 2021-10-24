@@ -4,10 +4,10 @@ namespace Nextras\OrmPhpStan\Reflection;
 
 use Nextras\Orm\Entity\IEntity;
 use Nextras\OrmPhpStan\Reflection\Annotations\AnnotationPropertyReflection;
-use PHPStan\Reflection\Annotations\AnnotationsPropertiesClassReflectionExtension;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\PropertiesClassReflectionExtension;
 use PHPStan\Reflection\PropertyReflection;
+use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\TypeCombinator;
@@ -15,20 +15,10 @@ use PHPStan\Type\TypeCombinator;
 
 class EntityDateTimePropertyReflectionExtension implements PropertiesClassReflectionExtension
 {
-	/** @var AnnotationsPropertiesClassReflectionExtension */
-	private $annotationsExtension;
-
-
-	public function __construct(AnnotationsPropertiesClassReflectionExtension $annotationsExtension)
-	{
-		$this->annotationsExtension = $annotationsExtension;
-	}
-
-
 	public function hasProperty(ClassReflection $classReflection, string $propertyName): bool
 	{
-		$hasProperty = $this->annotationsExtension->hasProperty($classReflection, $propertyName);
-		if (!$hasProperty) {
+		$property = $classReflection->getPropertyTags()[$propertyName] ?? null;
+		if ($property === null) {
 			return false;
 		}
 
@@ -39,8 +29,7 @@ class EntityDateTimePropertyReflectionExtension implements PropertiesClassReflec
 			return false;
 		}
 
-		$property = $this->annotationsExtension->getProperty($classReflection, $propertyName);
-		$propertyType = TypeCombinator::removeNull($property->getReadableType()); // remove null to be properly match subtype
+		$propertyType = TypeCombinator::removeNull($property->getType()); // remove null to properly match subtype
 		$dateTimeType = new ObjectType(\DateTimeImmutable::class);
 		$hasDateTime = $dateTimeType->isSuperTypeOf($propertyType)->yes();
 
@@ -50,11 +39,15 @@ class EntityDateTimePropertyReflectionExtension implements PropertiesClassReflec
 
 	public function getProperty(ClassReflection $classReflection, string $propertyName): PropertyReflection
 	{
-		$property = $this->annotationsExtension->getProperty($classReflection, $propertyName);
+		$property = $classReflection->getPropertyTags()[$propertyName] ?? null;
+		if ($property === null) {
+			throw new ShouldNotHappenException();
+		}
+
 		return new AnnotationPropertyReflection(
-			$property->getDeclaringClass(),
-			$property->getReadableType(),
-			TypeCombinator::union($property->getWritableType(), new StringType()),
+			$classReflection,
+			$property->getType(),
+			TypeCombinator::union($property->getType(), new StringType()),
 			$property->isReadable(),
 			$property->isWritable()
 		);
