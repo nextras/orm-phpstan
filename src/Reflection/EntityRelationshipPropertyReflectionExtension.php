@@ -4,29 +4,19 @@ namespace Nextras\OrmPhpStan\Reflection;
 
 use Nextras\Orm\Entity\IEntity;
 use Nextras\OrmPhpStan\Reflection\Annotations\AnnotationPropertyReflection;
-use PHPStan\Reflection\Annotations\AnnotationsPropertiesClassReflectionExtension;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\PropertiesClassReflectionExtension;
 use PHPStan\Reflection\PropertyReflection;
+use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\TypeCombinator;
 
 
 class EntityRelationshipPropertyReflectionExtension implements PropertiesClassReflectionExtension
 {
-	/** @var AnnotationsPropertiesClassReflectionExtension */
-	private $annotationsExtension;
-
-
-	public function __construct(AnnotationsPropertiesClassReflectionExtension $annotationsExtension)
-	{
-		$this->annotationsExtension = $annotationsExtension;
-	}
-
-
 	public function hasProperty(ClassReflection $classReflection, string $propertyName): bool
 	{
-		$hasProperty = $this->annotationsExtension->hasProperty($classReflection, $propertyName);
+		$hasProperty = array_key_exists($propertyName, $classReflection->getPropertyTags());
 		if (!$hasProperty) {
 			return false;
 		}
@@ -50,11 +40,15 @@ class EntityRelationshipPropertyReflectionExtension implements PropertiesClassRe
 
 	public function getProperty(ClassReflection $classReflection, string $propertyName): PropertyReflection
 	{
-		$property = $this->annotationsExtension->getProperty($classReflection, $propertyName);
+		$property = $classReflection->getPropertyTags()[$propertyName] ?? null;
+		if ($property === null) {
+			throw new ShouldNotHappenException();
+		}
+
 		return new AnnotationPropertyReflection(
-			$property->getDeclaringClass(),
-			$property->getReadableType(),
-			TypeCombinator::union($property->getWritableType(), new IntegerType()),
+			$classReflection,
+			$property->getType(),
+			TypeCombinator::union($property->getType(), new IntegerType()),
 			$property->isReadable(),
 			$property->isWritable()
 		);

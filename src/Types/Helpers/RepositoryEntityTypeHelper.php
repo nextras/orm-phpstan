@@ -48,7 +48,7 @@ class RepositoryEntityTypeHelper
 		$className = $repositoryReflection->getName();
 		$fileName = $repositoryReflection->getFileName();
 
-		assert($fileName !== false, sprintf('File for clsas "%s" does not exists.', $className));
+		assert($fileName !== null, sprintf('File for class "%s" does not exists.', $className));
 
 		$ast = $this->parser->parseFile($fileName);
 
