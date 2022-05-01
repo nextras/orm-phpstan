@@ -105,7 +105,7 @@ class RepositoryReturnTypeExtension implements DynamicMethodReturnTypeExtension
 		Scope $scope
 	): Type
 	{
-		if ($repositoryClassName === Repository::class) {
+		if ($repositoryClassName === Repository::class || $repositoryClassName === IRepository::class) {
 			return ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType();
 		}
 
