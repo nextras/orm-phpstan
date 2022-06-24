@@ -61,6 +61,7 @@ class RepositoryReturnTypeExtension implements DynamicMethodReturnTypeExtension
 			'findAll',
 			'findBy',
 			'findById',
+			'findByIds',
 			'persist',
 			'persistAndFlush',
 			'remove',
@@ -124,6 +125,7 @@ class RepositoryReturnTypeExtension implements DynamicMethodReturnTypeExtension
 			'findAll',
 			'findBy',
 			'findById',
+			'findByIds',
 		];
 
 		static $entityReturnMethods = [
