@@ -124,7 +124,7 @@ class RepositoryReturnTypeExtension implements DynamicMethodReturnTypeExtension
 		static $collectionReturnMethods = [
 			'findAll',
 			'findBy',
-			'findById'
+			'findById',
 			'findByIds',
 		];
 
