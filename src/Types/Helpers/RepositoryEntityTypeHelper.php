@@ -59,6 +59,7 @@ class RepositoryEntityTypeHelper
 		$nodeFinder = new NodeFinder();
 		$class = $nodeFinder->findFirst($ast, function (Node $node) use ($className) {
 			return $node instanceof Node\Stmt\Class_
+				&& $node->namespacedName !== null
 				&& $node->namespacedName->toString() === $className;
 		});
 
