@@ -36,5 +36,10 @@
 	},
 	"scripts": {
 		"tests": "tester ./tests/test.php && phpstan analyze"
+	},
+	"config": {
+		"allow-plugins": {
+			"phpstan/extension-installer": true
+		}
 	}
 }
