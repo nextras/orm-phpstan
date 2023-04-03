@@ -98,7 +98,7 @@ class RepositoryReturnTypeExtension implements DynamicMethodReturnTypeExtension
 
 
 	/**
-	 * @param class-string<Repository> $repositoryClassName
+	 * @param class-string<IRepository> $repositoryClassName
 	 */
 	private function getEntityTypeFromMethodClass(
 		string $repositoryClassName,
