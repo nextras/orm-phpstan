@@ -90,7 +90,20 @@ class SetValueMethodRule implements Rule
 			}
 
 			$property = $class->getProperty($fieldName, $scope);
+
+			if (!$property->isWritable() && $methodName !== 'setReadOnlyValue') {
+				$errors[] = sprintf(
+					'Entity %s: property $%s is read-only.',
+					$className,
+					$fieldName
+				);
+				continue;
+			}
+
 			$propertyType = $property->getWritableType();
+			if (!$property->isWritable()) {
+				$propertyType = $property->getReadableType();
+			}
 
 			if (!$propertyType->accepts($valueType, true)->yes()) {
 				$errors[] = sprintf(
@@ -99,15 +112,6 @@ class SetValueMethodRule implements Rule
 					$fieldName,
 					$propertyType->describe(VerbosityLevel::typeOnly()),
 					$valueType->describe(VerbosityLevel::typeOnly())
-				);
-				continue;
-			}
-
-			if (!$property->isWritable() && $methodName !== 'setReadOnlyValue') {
-				$errors[] = sprintf(
-					'Entity %s: property $%s is read-only.',
-					$className,
-					$fieldName
 				);
 			}
 		}
