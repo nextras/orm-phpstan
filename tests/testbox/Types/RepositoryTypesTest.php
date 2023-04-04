@@ -12,7 +12,6 @@ class RepositoryTypesTest
 		$this->takeAuthor($repository->getById(1));
 		$this->takeAuthor($repository->getBy([]));
 
-		/** @var IEntity $a */
 		$a = $repository->getById(1);
 		$this->takeAuthor($booksRepository->persist($a));
 	}
@@ -29,8 +28,7 @@ class RepositoryTypesTest
 		$this->takeAuthorNullable($repository->findBy([])->orderBy([])->limitBy(2, 0)->getById(1));
 		$this->takeAuthorArray($repository->findAll()->fetchAll());
 
-		/** @var IEntity $a */
-		$a = $repository->getById(1);
+		$a = $repository->getByIdChecked(1);
 		$this->takeAuthor($repository->persist($a));
 
 		/** @var AuthorsRepository|BooksRepository $someRepo */
