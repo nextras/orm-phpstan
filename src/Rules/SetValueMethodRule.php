@@ -6,12 +6,11 @@ use Nextras\Orm\Entity\IEntity;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
-use PHPStan\Broker\Broker;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
-use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\VerbosityLevel;
+
 
 /**
  * @phpstan-implements Rule<MethodCall>
@@ -60,7 +59,8 @@ class SetValueMethodRule implements Rule
 
 		$valueType = $scope->getType($args[1]->value);
 		$varType = $scope->getType($node->var);
-		if (!$varType instanceof TypeWithClassName) {
+		$classNames = $varType->getObjectClassNames();
+		if (count($classNames) < 1) {
 			return [];
 		}
 
@@ -68,45 +68,50 @@ class SetValueMethodRule implements Rule
 		if (!$firstValue instanceof Node\Scalar\String_) {
 			return [];
 		}
-
 		$fieldName = $firstValue->value;
-		$class = $this->reflectionProvider->getClass($varType->getClassName());
-		$interfaces = array_map(function (ClassReflection $interface) {
-			return $interface->getName();
-		}, $class->getInterfaces());
-		if (!in_array(IEntity::class, $interfaces, true)) {
-			return [];
+
+		$errors = [];
+		foreach ($classNames as $className) {
+			$class = $this->reflectionProvider->getClass($className);
+			$interfaces = array_map(function (ClassReflection $interface) {
+				return $interface->getName();
+			}, $class->getInterfaces());
+			if (!in_array(IEntity::class, $interfaces, true)) {
+				continue;
+			}
+
+			if (!$class->hasProperty($fieldName)) {
+				$errors[] = sprintf(
+					'Entity %s has no $%s property.',
+					$className,
+					$fieldName
+				);
+				continue;
+			}
+
+			$property = $class->getProperty($fieldName, $scope);
+			$propertyType = $property->getWritableType();
+
+			if (!$propertyType->accepts($valueType, true)->yes()) {
+				$errors[] = sprintf(
+					'Entity %s: property $%s (%s) does not accept %s.',
+					$className,
+					$fieldName,
+					$propertyType->describe(VerbosityLevel::typeOnly()),
+					$valueType->describe(VerbosityLevel::typeOnly())
+				);
+				continue;
+			}
+
+			if (!$property->isWritable() && $methodName !== 'setReadOnlyValue') {
+				$errors[] = sprintf(
+					'Entity %s: property $%s is read-only.',
+					$className,
+					$fieldName
+				);
+			}
 		}
 
-		if (!$class->hasProperty($fieldName)) {
-			return [sprintf(
-				'Entity %s has no $%s property.',
-				$varType->getClassName(),
-				$fieldName
-			)];
-		}
-
-		$property = $class->getProperty($fieldName, $scope);
-		$propertyType = $property->getWritableType();
-
-		if (!$propertyType->accepts($valueType, true)->yes()) {
-			return [sprintf(
-				'Entity %s: property $%s (%s) does not accept %s.',
-				$varType->getClassName(),
-				$fieldName,
-				$propertyType->describe(VerbosityLevel::typeOnly()),
-				$valueType->describe(VerbosityLevel::typeOnly())
-			)];
-		}
-
-		if (!$property->isWritable() && $methodName !== 'setReadOnlyValue') {
-			return [sprintf(
-				'Entity %s: property $%s is read-only.',
-				$varType->getClassName(),
-				$fieldName
-			)];
-		}
-
-		return [];
+		return $errors;
 	}
 }
