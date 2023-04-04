@@ -1,21 +1,5 @@
 services:
 	-
-		class: Nextras\OrmPhpStan\Types\CollectionReturnTypeExtension
-		tags:
-			- phpstan.broker.dynamicMethodReturnTypeExtension
-	-
-		class: Nextras\OrmPhpStan\Types\MapperMethodReturnTypeExtension
-		tags:
-			- phpstan.broker.dynamicMethodReturnTypeExtension
-	-
-		class: Nextras\OrmPhpStan\Types\RelationshipReturnTypeExtension
-		tags:
-			- phpstan.broker.dynamicMethodReturnTypeExtension
-	-
-		class: Nextras\OrmPhpStan\Types\RepositoryReturnTypeExtension
-		tags:
-			- phpstan.broker.dynamicMethodReturnTypeExtension
-	-
 		class: Nextras\OrmPhpStan\Reflection\EntityRelationshipPropertyReflectionExtension
 		tags:
 			- phpstan.broker.propertiesClassReflectionExtension
@@ -27,5 +11,3 @@ services:
 		class: Nextras\OrmPhpStan\Rules\SetValueMethodRule
 		tags:
 			- phpstan.rules.rule
-
-	- Nextras\OrmPhpStan\Types\Helpers\RepositoryEntityTypeHelper(@currentPhpVersionSimpleDirectParser)

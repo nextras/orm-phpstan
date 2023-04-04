@@ -3,11 +3,15 @@
 namespace NextrasTests\OrmPhpStan\Types;
 
 use Nextras\Orm\Collection\ICollection;
-use Nextras\Orm\Mapper\Mapper;
+use Nextras\Orm\Mapper\Dbal\DbalMapper;
 
 
-class AuthorsMapper extends Mapper
+/**
+ * @extends DbalMapper<Author>
+ */
+class AuthorsMapper extends DbalMapper
 {
+	/** @return ICollection<Author> */
 	public function findAllWithTranslatedIps(): ICollection
 	{
 		return $this->toCollection(

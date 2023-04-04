@@ -8,7 +8,7 @@ use Nextras\Orm\Collection\ICollection;
 class CollectionTypesTest
 {
 	/**
-	 * @param Author[]|ICollection $collection
+	 * @param ICollection<Author> $collection
 	 */
 	public function testError($collection): void
 	{
@@ -18,7 +18,7 @@ class CollectionTypesTest
 
 
 	/**
-	 * @param Author[]|ICollection $collection
+	 * @param ICollection<Author> $collection
 	 */
 	public function testOk($collection): void
 	{
