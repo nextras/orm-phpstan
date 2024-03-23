@@ -9,6 +9,7 @@ use PHPStan\Reflection\PropertiesClassReflectionExtension;
 use PHPStan\Reflection\PropertyReflection;
 use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\IntegerType;
+use PHPStan\Type\NeverType;
 use PHPStan\Type\TypeCombinator;
 
 
@@ -41,14 +42,14 @@ class EntityRelationshipPropertyReflectionExtension implements PropertiesClassRe
 	public function getProperty(ClassReflection $classReflection, string $propertyName): PropertyReflection
 	{
 		$property = $classReflection->getPropertyTags()[$propertyName] ?? null;
-		if ($property === null) {
+		if ($property === null || $property->getReadableType() === null) {
 			throw new ShouldNotHappenException();
 		}
 
 		return new AnnotationPropertyReflection(
 			$classReflection,
-			$property->getType(),
-			TypeCombinator::union($property->getType(), new IntegerType()),
+			$property->getReadableType(),
+			TypeCombinator::union($property->getWritableType() ?? new NeverType(), new IntegerType()),
 			$property->isReadable(),
 			$property->isWritable()
 		);

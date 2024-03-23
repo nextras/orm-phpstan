@@ -8,6 +8,7 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\PropertiesClassReflectionExtension;
 use PHPStan\Reflection\PropertyReflection;
 use PHPStan\ShouldNotHappenException;
+use PHPStan\Type\NeverType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\TypeCombinator;
@@ -29,7 +30,10 @@ class EntityDateTimePropertyReflectionExtension implements PropertiesClassReflec
 			return false;
 		}
 
-		$propertyType = TypeCombinator::removeNull($property->getType()); // remove null to properly match subtype
+		$type = $property->getReadableType() ?? $property->getWritableType();
+		if ($type === null) throw new ShouldNotHappenException();
+
+		$propertyType = TypeCombinator::removeNull($type); // remove null to properly match subtype
 		$dateTimeType = new ObjectType(\DateTimeImmutable::class);
 		$hasDateTime = $dateTimeType->isSuperTypeOf($propertyType)->yes();
 
@@ -40,14 +44,14 @@ class EntityDateTimePropertyReflectionExtension implements PropertiesClassReflec
 	public function getProperty(ClassReflection $classReflection, string $propertyName): PropertyReflection
 	{
 		$property = $classReflection->getPropertyTags()[$propertyName] ?? null;
-		if ($property === null) {
+		if ($property === null || $property->getReadableType() === null) {
 			throw new ShouldNotHappenException();
 		}
 
 		return new AnnotationPropertyReflection(
 			$classReflection,
-			$property->getType(),
-			TypeCombinator::union($property->getType(), new StringType()),
+			$property->getReadableType(),
+			TypeCombinator::union($property->getWritableType() ?? new NeverType(), new StringType()),
 			$property->isReadable(),
 			$property->isWritable()
 		);
