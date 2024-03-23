@@ -1,6 +1,8 @@
 parameters:
 	scanDirectories:
 		- %rootDir%/../../../tests/testbox
+	paths:
+		- ../src
 
 services:
 	errorFormatter.rawSimple:

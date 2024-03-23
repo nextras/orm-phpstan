@@ -35,8 +35,8 @@
 		}
 	},
 	"scripts": {
-		"phpstan": "phpstan analyze",
-		"tests": "tester ./tests/test.php && phpstan analyze"
+		"phpstan": "phpstan analyze -c phpstan.neon",
+		"tests": "tester ./tests/test.php && phpstan analyze -c phpstan.neon"
 	},
 	"config": {
 		"allow-plugins": {
