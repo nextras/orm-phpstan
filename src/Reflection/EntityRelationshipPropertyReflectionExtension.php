@@ -34,7 +34,8 @@ class EntityRelationshipPropertyReflectionExtension implements PropertiesClassRe
 			return false;
 		}
 
-		$hasRelationship = preg_match('#\$' . $propertyName . '\s(?:[^\n]*)\{[1m]:1.+\}.*$#m', $phpDoc) === 1;
+		$regexp = '#\$' . preg_quote($propertyName, '#') . '[^\n]+\{[1m]:1.+}.*$#m';
+		$hasRelationship = preg_match($regexp, $phpDoc) === 1;
 		return $hasRelationship;
 	}
 
