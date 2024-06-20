@@ -2,6 +2,10 @@
 	"name": "nextras/orm-phpstan",
 	"description": "PHPStan extension for Nextras Orm",
 	"type": "phpstan-extension",
+	"keywords": [
+		"dev",
+		"static analysis"
+	],
 	"license": [
 		"MIT"
 	],
