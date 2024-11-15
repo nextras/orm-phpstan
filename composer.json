@@ -11,11 +11,11 @@
 	],
 	"require": {
 		"php": ">=8.1",
-		"phpstan/phpstan": "^1.10.12"
+		"phpstan/phpstan": "^1.10.12 || ^2.0.0"
 	},
 	"require-dev": {
 		"phpstan/extension-installer": "^1.1",
-		"phpstan/phpstan-deprecation-rules": "^1.0",
+		"phpstan/phpstan-deprecation-rules": "^1.0 || ^2.0",
 		"nextras/orm": "~5.0@dev",
 		"nette/tester": "^2.3.1"
 	},

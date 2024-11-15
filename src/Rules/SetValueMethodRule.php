@@ -9,6 +9,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
+use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\VerbosityLevel;
 
 
@@ -35,8 +36,6 @@ class SetValueMethodRule implements Rule
 
 	/**
 	 * @param MethodCall $node
-	 *
-	 * @return string[]
 	 */
 	public function processNode(Node $node, Scope $scope): array
 	{
@@ -81,22 +80,22 @@ class SetValueMethodRule implements Rule
 			}
 
 			if (!$class->hasProperty($fieldName)) {
-				$errors[] = sprintf(
-					'Entity %s has no $%s property.',
-					$className,
-					$fieldName
-				);
+				$errors[] = RuleErrorBuilder::message(sprintf('Entity %s has no $%s property.', $className, $fieldName))
+					->identifier("nextrasOrm.propertyNotFound")
+					->build();
 				continue;
 			}
 
 			$property = $class->getProperty($fieldName, $scope);
 
 			if (!$property->isWritable() && $methodName !== 'setReadOnlyValue') {
-				$errors[] = sprintf(
+				$errors[] = RuleErrorBuilder::message(sprintf(
 					'Entity %s: property $%s is read-only.',
 					$className,
 					$fieldName
-				);
+				))
+					->identifier("nextrasOrm.propertyReadOnly")
+					->build();
 				continue;
 			}
 
@@ -106,13 +105,15 @@ class SetValueMethodRule implements Rule
 			}
 
 			if (!$propertyType->accepts($valueType, true)->yes()) {
-				$errors[] = sprintf(
+				$errors[] = RuleErrorBuilder::message(sprintf(
 					'Entity %s: property $%s (%s) does not accept %s.',
 					$className,
 					$fieldName,
 					$propertyType->describe(VerbosityLevel::typeOnly()),
 					$valueType->describe(VerbosityLevel::typeOnly())
-				);
+				))
+					->identifier("nextrasOrm.propertyUnresolvableType")
+					->build();
 			}
 		}
 
