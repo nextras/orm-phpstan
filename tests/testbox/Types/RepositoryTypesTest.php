@@ -17,7 +17,10 @@ class RepositoryTypesTest
 	}
 
 
-	public function testOk(AuthorsRepository $repository): void
+	/**
+	 * @param AuthorsRepository|BooksRepository $repository2
+	 */
+	public function testOk(AuthorsRepository $repository, $repository2): void
 	{
 		$this->takeAuthor($repository->getByIdChecked(1));
 		$this->takeAuthor($repository->getByChecked(['id' => 1]));
@@ -31,9 +34,7 @@ class RepositoryTypesTest
 		$a = $repository->getByIdChecked(1);
 		$this->takeAuthor($repository->persist($a));
 
-		/** @var AuthorsRepository|BooksRepository $someRepo */
-		$someRepo = $repository;
-		foreach ($someRepo->findAll() as $entity) {
+		foreach ($repository2->findAll() as $entity) {
 			if ($entity instanceof Author) {
 				$this->takeAuthor($entity);
 			} else {
