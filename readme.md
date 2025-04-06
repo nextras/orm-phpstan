@@ -13,7 +13,7 @@ To use this extension, require it in [Composer](https://getcomposer.org/):
 composer require --dev nextras/orm-phpstan
 ```
 
-We recommend using [PHPStan auto extension installer](phpstan/extension-installer), but you may include this extension manually by including `extension.neon` in your project's PHPStan config:
+We recommend using [PHPStan auto extension installer](https://github.com/phpstan/extension-installer), but you may include this extension manually by including `extension.neon` in your project's PHPStan config:
 
 ```
 includes:
